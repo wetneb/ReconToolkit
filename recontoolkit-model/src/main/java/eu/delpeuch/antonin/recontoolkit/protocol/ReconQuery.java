@@ -1,10 +1,32 @@
 
 package eu.delpeuch.antonin.recontoolkit.protocol;
 
+/*-
+ * #%L
+ * ReconToolkit data model
+ * %%
+ * Copyright (C) 2022 - 2023 ReconToolkit Developers
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 import java.util.Objects;
-
-import com.google.gson.annotations.SerializedName;
 
 /**
  * A reconciliation query.
@@ -15,15 +37,16 @@ import com.google.gson.annotations.SerializedName;
 public class ReconQuery {
 
     public static enum TypeStrict {
-        SHOULD, ALL, ANY
+        @JsonProperty("should")
+        SHOULD, @JsonProperty("all")
+        ALL, @JsonProperty("any")
+        ANY
     };
 
     private final String query;
-    @SerializedName("type")
     private final List<String> typeIds;
     private final Integer limit;
     private final List<PropertyMapping> properties;
-    @SerializedName("type_strict")
     private final TypeStrict typeStrict;
 
     /**
@@ -40,7 +63,13 @@ public class ReconQuery {
      * @param typeStrict
      *            a parameter whose meaning is unclear
      */
-    public ReconQuery(String query, List<String> typeIds, Integer limit, List<PropertyMapping> properties, TypeStrict typeStrict) {
+    @JsonCreator
+    public ReconQuery(
+            @JsonProperty("query") String query,
+            @JsonProperty("types") List<String> typeIds,
+            @JsonProperty("limit") Integer limit,
+            @JsonProperty("properties") List<PropertyMapping> properties,
+            @JsonProperty("type_strict") TypeStrict typeStrict) {
         this.query = query;
         this.typeIds = typeIds;
         this.limit = limit;
@@ -51,6 +80,7 @@ public class ReconQuery {
     /**
      * @return the name of the entity to look for (can be null)
      */
+    @JsonProperty("query")
     public String getQuery() {
         return query;
     }
@@ -58,6 +88,8 @@ public class ReconQuery {
     /**
      * @return the list of type ids to restrict the matching to (can be null)
      */
+    @JsonProperty("type")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public List<String> getTypeIds() {
         return typeIds;
     }
@@ -65,6 +97,8 @@ public class ReconQuery {
     /**
      * @return the maximum number of reconciliation candidates to return (can be null)
      */
+    @JsonProperty("limit")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public Integer getLimit() {
         return limit;
     }
@@ -72,6 +106,8 @@ public class ReconQuery {
     /**
      * @return any property mapping to refine the search (can be null)
      */
+    @JsonProperty("properties")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public List<PropertyMapping> getProperties() {
         return properties;
     }
@@ -79,6 +115,8 @@ public class ReconQuery {
     /**
      * @return a parameter whose meaning is unclear (can be null)
      */
+    @JsonProperty("type_strict")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public TypeStrict getTypeStrict() {
         return typeStrict;
     }
@@ -104,4 +142,48 @@ public class ReconQuery {
                 + typeStrict + "]";
     }
 
+    public static final class Builder {
+
+        private String query;
+        private List<String> typeIds;
+        private Integer limit;
+        private List<PropertyMapping> properties;
+        private TypeStrict typeStrict;
+
+        private Builder() {
+        }
+
+        public static Builder aReconQuery() {
+            return new Builder();
+        }
+
+        public Builder withQuery(String query) {
+            this.query = query;
+            return this;
+        }
+
+        public Builder withTypeIds(List<String> typeIds) {
+            this.typeIds = typeIds;
+            return this;
+        }
+
+        public Builder withLimit(Integer limit) {
+            this.limit = limit;
+            return this;
+        }
+
+        public Builder withProperties(List<PropertyMapping> properties) {
+            this.properties = properties;
+            return this;
+        }
+
+        public Builder withTypeStrict(TypeStrict typeStrict) {
+            this.typeStrict = typeStrict;
+            return this;
+        }
+
+        public ReconQuery build() {
+            return new ReconQuery(query, typeIds, limit, properties, typeStrict);
+        }
+    }
 }

@@ -1,6 +1,29 @@
 
 package eu.delpeuch.antonin.recontoolkit.protocol;
 
+/*-
+ * #%L
+ * ReconToolkit data model
+ * %%
+ * Copyright (C) 2022 - 2023 ReconToolkit Developers
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.Validate;
+
 import java.util.Objects;
 
 /**
@@ -24,6 +47,7 @@ public class DoubleFeature implements Feature {
      */
     public DoubleFeature(String id, double value) {
         super();
+        Validate.notNull(id, "no id provided for reconciliation feature");
         this.id = id;
         this.value = value;
     }
@@ -31,6 +55,7 @@ public class DoubleFeature implements Feature {
     /**
      * @return the value of the matching feature
      */
+    @JsonProperty("value")
     public double getValue() {
         return value;
     }

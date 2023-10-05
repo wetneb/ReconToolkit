@@ -1,0 +1,14 @@
+{
+  "result": [
+    {
+      "id": "123",
+      "name": "similar to",
+      "description": "very vague meaning"
+    },
+    {
+      "id": "456",
+      "name": "simpler than",
+      "description": "also pretty ill-defined"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "result": [
+    {
+      "id": "abc",
+      "name": "person",
+      "description": "a human"
+    },
+    {
+      "id": "def",
+      "name": "personality",
+      "description": "a celebrity"
+    }
+  ]
+}
