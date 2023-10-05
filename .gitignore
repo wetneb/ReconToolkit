@@ -9,3 +9,6 @@
 # Eclipse settings
 .settings/
 .project
+
+# IntelliJ
+.idea/
